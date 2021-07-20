@@ -48,6 +48,11 @@ spec:
                 secretKeyRef:
                   name: rulesdecision-secret
                   key: MARIADB_PASSWORD
+            - name: MARIADB_DB
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_DB
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
