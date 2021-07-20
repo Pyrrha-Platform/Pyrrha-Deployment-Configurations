@@ -103,6 +103,11 @@ spec:
                 secretKeyRef:
                   name: mqtt-client-secret
                   key: MARIADB_PORT
+            - name: MARIADB_DB
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-client-secret
+                  key: MARIADB_DB
             - name: WS_HOST
               valueFrom:
                 secretKeyRef:
