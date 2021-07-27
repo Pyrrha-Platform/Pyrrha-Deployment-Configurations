@@ -1,0 +1,123 @@
+version: "3.9"
+
+services:
+  pyrrha-mariadb:
+    container_name: pyrrha-mariadb
+    image: pyrrha-mariadb
+    build:
+      context: ../Pyrrha-Database
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../Pyrrha-Database/data:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MDB_PASSWORD}
+  pyrrha-wss:
+    container_name: pyrrha-wss
+    build:
+      context: ../Pyrrha-WebSocket-Server
+      dockerfile: Dockerfile
+    image: pyrrha-wss
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - /user-app/node_modules
+      - ../Pyrrha-WebSocket-Server:/user-app
+  pyrrha-mqttclient:
+    container_name: pyrrha-mqttclient
+    build:
+      context: ../Pyrrha-MQTT-Client
+      dockerfile: Dockerfile
+    depends_on:
+      - pyrrha-mariadb
+      - pyrrha-wss
+    image: pyrrha-mqttclient
+    restart: always
+    env_file:
+      - ../Pyrrha-MQTT-Client/.env.docker
+    environment:
+      - MARIADB_PASSWORD=${MDB_PASSWORD}
+    volumes:
+      - /usr/src/app/node_modules
+      - ../Pyrrha-MQTT-Client:/usr/src/app
+  pyrrha-rulesdecision:
+    container_name: pyrrha-rulesdecision
+    build:
+      context: ../Pyrrha-Rules-Decision
+      dockerfile: Dockerfile
+    depends_on:
+      - pyrrha-mariadb
+    image: pyrrha-rulesdecision
+    restart: always
+    env_file:
+      - ../Pyrrha-Rules-Decision/src/.env.docker
+    environment:
+      - MARIADB_PASSWORD=${MDB_PASSWORD}
+  pyrrha-api-main:
+    container_name: pyrrha-api-main
+    build:
+      context: ../Pyrrha-Dashboard/pyrrha-dashboard/api-main
+      dockerfile: Dockerfile
+    depends_on:
+      - pyrrha-mariadb
+      - pyrrha-wss
+    image: pyrrha-api-main
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ../Pyrrha-Dashboard/pyrrha-dashboard/api-main/.env.docker
+    environment:
+      - MARIADB_PASSWORD=${MDB_PASSWORD}
+  pyrrha-api-auth:
+    container_name: pyrrha-api-auth
+    build:
+      context: ../Pyrrha-Dashboard/pyrrha-dashboard/api-auth
+      dockerfile: Dockerfile
+    depends_on:
+      - pyrrha-api-main
+    image: pyrrha-api-auth
+    restart: always
+    ports:
+      - "4000:4000"
+  pyrrha-dashboard:
+    container_name: pyrrha-dashboard
+    build:
+      context: ../Pyrrha-Dashboard/pyrrha-dashboard
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - pyrrha-api-auth
+      - pyrrha-api-main
+      - pyrrha-mqttclient
+      - pyrrha-rulesdecision
+    image: pyrrha-dashboard
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_MAIN_PROXY=http://pyrrha-api-main:5000
+      - REACT_APP_AUTH_PROXY=http://pyrrha-api-auth:4000
+      - REACT_APP_WEBSOCKET_URL=ws://localhost:8080
+    volumes:
+      - /app/node_modules
+      - ../Pyrrha-Dashboard/pyrrha-dashboard:/app
+    stdin_open: true
+  pyrrha-simulator:
+    container_name: pyrrha-simulator
+    build:
+      context: ../Pyrrha-Sensor-Simulator/action
+      dockerfile: Dockerfile
+    image: pyrrha-simulator
+    env_file:
+      - ../Pyrrha-Sensor-Simulator/action/.env.docker
+    restart: always
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - /user-app/node_modules
+      - ../Pyrrha-Sensor-Simulator/action:/user-app
