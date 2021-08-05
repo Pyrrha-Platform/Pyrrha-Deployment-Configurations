@@ -33,6 +33,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 ### Locally on your machine
 
 - [Docker](https://docs.docker.com/engine/install/)
+
   - Ensure you have docker installed by using `docker --version` command. You should see output as follows:
 
     ```bash
@@ -40,6 +41,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
     ```
 
 - [Docker Compose](https://docs.docker.com/compose/install/)
+
   - Ensure you have docker installed by using `docker-compose --version` command. You should see output as follows:
 
     ```bash
@@ -94,41 +96,41 @@ Let's configure each of the services.
 
 1. Fill in the values in `Pyrrha-MQTT-Client/.env.docker` file. You need to fill out:
 
-    - orgid in `IOT_HOST` and `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
-    - IOT_USERNAME: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
-    - IOT_PASSWORD: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
+   - orgid in `IOT_HOST` and `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+   - IOT_USERNAME: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
+   - IOT_PASSWORD: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
 
-    You can leave the rest of the values the same:
+   You can leave the rest of the values the same:
 
-    ```bash
-    # IBM IoT
-    IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
-    IOT_TOPIC=iot-2/type/+/id/+/evt/+/fmt/+
-    IOT_PROTOCOL=mqtts
-    IOT_USERNAME=
-    IOT_PASSWORD=
-    IOT_SECURE_PORT=8883
-    IOT_PORT=1883
-    IOT_CLIENTID=a:orgid:my_app
-    IOT_PEM=messaging.pem
-    ```
+   ```bash
+   # IBM IoT
+   IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
+   IOT_TOPIC=iot-2/type/+/id/+/evt/+/fmt/+
+   IOT_PROTOCOL=mqtts
+   IOT_USERNAME=
+   IOT_PASSWORD=
+   IOT_SECURE_PORT=8883
+   IOT_PORT=1883
+   IOT_CLIENTID=a:orgid:my_app
+   IOT_PEM=messaging.pem
+   ```
 
-    Leave the database section as follows:
+   Leave the database section as follows:
 
-    ```bash
-    MARIADB_HOST=pyrrha-mariadb
-    MARIADB_PORT=3306
-    MARIADB_USERNAME=root
-    MARIADB_PASSWORD=$MDB_PASSWORD
-    MARIADB_DB=pyrrha
-    ```
+   ```bash
+   MARIADB_HOST=pyrrha-mariadb
+   MARIADB_PORT=3306
+   MARIADB_USERNAME=root
+   MARIADB_PASSWORD=$MDB_PASSWORD
+   MARIADB_DB=pyrrha
+   ```
 
-    Leave the websocket server section as follows:
+   Leave the websocket server section as follows:
 
-    ```bash
-    WS_HOST=pyrrha-wss
-    WS_PORT=8080
-    ```
+   ```bash
+   WS_HOST=pyrrha-wss
+   WS_PORT=8080
+   ```
 
 2. Download messaging.pem file from [here](https://raw.githubusercontent.com/ibm-watson-iot/iot-python/master/src/wiotp/sdk/messaging.pem) into the root `Pyrrha-MQTT-Client` directory.
 
@@ -136,34 +138,34 @@ Let's configure each of the services.
 
 1. Ensure the `Pyrrha-Rules-Decision/src/.env.docker` file contains the following variables:
 
-    ```bash
-    MARIADB_HOST=pyrrha-mariadb
-    MARIADB_PORT=3306
-    MARIADB_USERNAME=root
-    MARIADB_PASSWORD=$MDB_PASSWORD
-    MARIADB_DB=pyrrha
-    ```
+   ```bash
+   MARIADB_HOST=pyrrha-mariadb
+   MARIADB_PORT=3306
+   MARIADB_USERNAME=root
+   MARIADB_PASSWORD=$MDB_PASSWORD
+   MARIADB_DB=pyrrha
+   ```
 
 ### pyrrha-api-main
 
 1. Ensure the `Pyrrha-Dashboard/pyrrha-dashboard/api-main/.env.docker` file contains the following variables:
 
-    ```bash
-    MARIADB_HOST=pyrrha-mariadb
-    MARIADB_PORT=3306
-    MARIADB_USERNAME=root
-    MARIADB_PASSWORD=$MDB_PASSWORD
-    MARIADB_DB=pyrrha
-    ```
+   ```bash
+   MARIADB_HOST=pyrrha-mariadb
+   MARIADB_PORT=3306
+   MARIADB_USERNAME=root
+   MARIADB_PASSWORD=$MDB_PASSWORD
+   MARIADB_DB=pyrrha
+   ```
 
 ### pyrrha-api-auth
 
 1. The authorization service uses IBM Cloud App ID service for authentication and authorization. Make a copy of the `vcap-local.template.json` file located in the `Pyrrha-Dashboard/pyrrha-dashboard/api-auth` directory and rename it `vcap-local.json` (this file is ignored by Git) using this command:
 
-    ```bash
-    # from the root directory
-    cp ./Pyrrha-Dashboard/pyrrha-dashboard/api-auth/vcap-local.template.json Pyrrha-Dashboard/pyrrha-dashboard/api-auth/vcap-local.json
-    ```
+   ```bash
+   # from the root directory
+   cp ./Pyrrha-Dashboard/pyrrha-dashboard/api-auth/vcap-local.template.json Pyrrha-Dashboard/pyrrha-dashboard/api-auth/vcap-local.json
+   ```
 
 2. Provision an AppID instance in IBM Cloud - https://cloud.ibm.com/catalog/services/app-id
 3. Create AppID service credentials: In the newly created AppID instance, go to Service Credentials -> New credential. Set the role to `Writer`.
@@ -181,19 +183,20 @@ Let's configure each of the services.
 
 1. Ensure the `Pyrrha-Sensor-Simulator/action/.env.docker` file exists and contains the following variables:
 
-    ```bash
-    IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
-    IOT_PROTOCOL=mqtts
-    IOT_USERNAME=use-token-auth
-    IOT_SECURE_PORT=8883
-    IOT_PEM=messaging.pem
-    ```
+   ```bash
+   IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
+   IOT_PROTOCOL=mqtts
+   IOT_USERNAME=use-token-auth
+   IOT_SECURE_PORT=8883
+   IOT_PEM=messaging.pem
+   ```
 
-    Replace `orgid` with your IoT organization id. See details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+   Replace `orgid` with your IoT organization id. See details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
 
 2. Download messaging.pem file from [here](https://raw.githubusercontent.com/ibm-watson-iot/iot-python/master/src/wiotp/sdk/messaging.pem) into the `Pyrrha-Sensor-Simulator/action` directory.
 
 3. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
+
    - orgid in `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
    - device-type in `IOT_CLIENTID`: type you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
    - device-id in `IOT_CLIENTID`: is you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
@@ -203,10 +206,10 @@ Let's configure each of the services.
 
    ```json
    {
-      "IOT_CLIENTID": "d:orgid:device-type:device-id",
-      "IOT_PASSWORD": "",
-      "IOT_FIREFIGHTER_ID": "",
-      "IOT_DEVICE_ID": "device-id"
+     "IOT_CLIENTID": "d:orgid:device-type:device-id",
+     "IOT_PASSWORD": "",
+     "IOT_FIREFIGHTER_ID": "",
+     "IOT_DEVICE_ID": "device-id"
    }
    ```
 
