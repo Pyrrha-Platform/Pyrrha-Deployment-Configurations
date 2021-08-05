@@ -49,7 +49,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 ### IBM Cloud
 
 - Sign up for an [IBM Cloud account](https://cloud.ibm.com/registration).
-- Create [IBM IoT service](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md) and copy the application credentials as [detailed here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md).
+- Create [IBM IoT service](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md) and copy the application credentials as [detailed here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md).
 - Create [IBM App ID service](https://cloud.ibm.com/catalog/services/app-id) and make note of the credentials.
 
 ## Configuration
@@ -94,9 +94,9 @@ Let's configure each of the services.
 
 1. Fill in the values in `Pyrrha-MQTT-Client/.env.docker` file. You need to fill out:
 
-    - orgid in `IOT_HOST` and `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md#obtain-organization-id-from-the-iot-platform).
-    - IOT_USERNAME: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
-    - IOT_PASSWORD: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
+    - orgid in `IOT_HOST` and `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+    - IOT_USERNAME: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
+    - IOT_PASSWORD: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
 
     You can leave the rest of the values the same:
 
@@ -189,12 +189,12 @@ Let's configure each of the services.
     IOT_PEM=messaging.pem
     ```
 
-    Replace `orgid` with your IoT organization id. See details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+    Replace `orgid` with your IoT organization id. See details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
 
 2. Download messaging.pem file from [here](https://raw.githubusercontent.com/ibm-watson-iot/iot-python/master/src/wiotp/sdk/messaging.pem) into the `Pyrrha-Sensor-Simulator/action` directory.
 
 3. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
-   - orgid in `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IoT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+   - orgid in `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
    - device-type in `IOT_CLIENTID`: type you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
    - device-id in `IOT_CLIENTID`: is you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
    - IOT_PASSWORD: the token that is generated for you when you add a new device. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform).
