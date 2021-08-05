@@ -2,13 +2,13 @@
 
 Docker Compose is a tool for defining and running multi-container Docker applications. The Pyrrha project consists of the following services.
 
-- **pyrrha-mariadb**: database that holds all the Pyrrha data
-- **pyrrha-wss**: a WebSocket server
-- **pyrrha-mqttclient**: service that sits between the IoT platform and other services
-- **pyrrha-rulesdecision**: analytics service that calculates the time weighted averages of all data
-- **pyrrha-api-main**: API backend for the dashboard
-- **pyrrha-api-auth**: API backend used for authentication
-- **pyrrha-dashboard:** dashboard that shows the real-time and long-term averages of firefighter exposure to toxic gases
+- **pyrrha-mariadb**: the database that holds all the Pyrrha data
+- **pyrrha-wss**: the WebSocket server
+- **pyrrha-mqttclient**: the service that sits between the IoT platform and other services
+- **pyrrha-rulesdecision**: the analytics service that calculates the time weighted averages of all data
+- **pyrrha-api-main**: the API backend for the dashboard
+- **pyrrha-api-auth**: the API backend used for authentication
+- **pyrrha-dashboard:** the dashboard that shows the real-time and long-term averages of firefighter exposure to toxic gases
 
 > Note: This environment does not set up the smartphone or watch apps.
 
@@ -56,7 +56,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 
 ## Configuration
 
-1. Create a repository called `pyrrha`. This is where the rest of the code will be cloned.
+1. Create a directory called `pyrrha`. This is where the rest of the code will be cloned.
 
    ```bash
    mkdir pyrrha && cd pyrrha
@@ -71,7 +71,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
    git clone https://github.com/Pyrrha-Platform/Pyrrha-Rules-Decision &&
    git clone https://github.com/Pyrrha-Platform/Pyrrha-MQTT-Client &&
    git clone https://github.com/Pyrrha-Platform/Pyrrha-Database &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator.git
+   git clone https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator
    ```
 
 3. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
