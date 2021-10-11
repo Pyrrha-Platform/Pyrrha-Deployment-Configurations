@@ -1,29 +1,7 @@
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-# mqttclient:
-#   name: mqttclient
-#   version: v1
-#   replicaCount: 1
-#   namespace: default
-#   image:
-#     repository: uk.icr.io/prometeo-cluster/mqttclient
-#     pullPolicy: Always
-#   livenessProbe:
-#     initialDelaySeconds: 30
-#     periodSeconds: 10
-#   service:
-#     servicePort: 8080
-# istio:
-#   virtualservices:
-#     enabled: true
-#   gateway:
-#     enabled: false
-
-# the image properties get overwritten by the IKS toolchain
 image:
-  repository: uk.icr.io/prometeo-cluster/mqttclient
+  repository: uk.icr.io/prometeo-cfc-cluster/mqttclient
   tag: latest
-  pullSecret: regsecret
+  pullSecret: all-icr-io
   pullPolicy: IfNotPresent
   # for local development against Minikube registry
   #pullPolicy: Never  

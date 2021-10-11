@@ -1,8 +1,7 @@
-# the image properties get overwritten by the IKS toolchain
 image:
-  repository: uk.icr.io/prometeo-cluster/rulesdecision
+  repository: uk.icr.io/prometeo-cfc-cluster/rulesdecision
   tag: latest
-  pullSecret: regsecret
+  pullSecret: all-icr-io
   pullPolicy: IfNotPresent
   # for local development against Minikube registry
   #pullPolicy: Never  
@@ -12,10 +11,10 @@ service:
   internalPort: 8080
   externalPort: 8080
 ingress:
-  enabled: true
+  enabled: false
   # Used to create an Ingress record.
   hosts:
-    - prometeo-kubernetes-8877e2c915ebdcc9b5067e5cb2150b3c-0000.eu-gb.containers.appdomain.cloud
+    - prometeo-eu-gb-3-bx2-2x8-514bd37ab295f8aeaf548c9dacf39708-0000.eu-gb.containers.appdomain.cloud
   annotations:
     kubernetes.io/ingress.class: "public-iks-k8s-nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /

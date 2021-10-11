@@ -29,7 +29,7 @@ metadata:
     release: api-main
     heritage: Helm
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
       app: api-main

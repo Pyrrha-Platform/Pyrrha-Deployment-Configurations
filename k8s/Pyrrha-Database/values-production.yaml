@@ -14,7 +14,7 @@
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.5.8-debian-10-r21
+  tag: 10.5.12-debian-10-r32
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -319,7 +319,7 @@ primary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "ibmc-block-silver"
+    storageClass: "ibmc-vpc-block-5iops-tier"
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -597,7 +597,7 @@ secondary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "ibmc-block-silver"
+    storageClass: "ibmc-vpc-block-5iops-tier"
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
