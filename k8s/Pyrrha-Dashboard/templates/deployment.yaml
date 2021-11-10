@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}-{{ .Values.apidash.deployment.name}}
   labels:
-    app: {{ template "name" . }}-{{ .Values.apidash.deployment.name}}
+    app: {{ .Values.apidash.deployment.name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -11,12 +11,12 @@ spec:
   replicas: {{ .Values.apidash.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ .Values.apidash.deployment.name }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ .Values.apidash.deployment.name }}
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
@@ -41,7 +41,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}-{{ .Values.apiauth.deployment.name}}
   labels:
-    app: {{ template "name" . }}-{{ .Values.apiauth.deployment.name}}
+    app: {{ .Values.apiauth.deployment.name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -49,12 +49,12 @@ spec:
   replicas: {{ .Values.apiauth.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ .Values.apiauth.deployment.name }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ .Values.apiauth.deployment.name }}
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
@@ -79,7 +79,7 @@ kind: Deployment
 metadata:
   name: {{ template "fullname" . }}-{{ .Values.apimain.deployment.name}}
   labels:
-    app: {{ template "name" . }}-{{ .Values.apimain.deployment.name}}
+    app: {{ .Values.apimain.deployment.name }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -87,12 +87,12 @@ spec:
   replicas: {{ .Values.apimain.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "name" . }}
+      app: {{ .Values.apimain.deployment.name }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "name" . }}
+        app: {{ .Values.apimain.deployment.name }}
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:

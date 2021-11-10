@@ -13,7 +13,7 @@ spec:
   - port: {{ .Values.apidash.service.internalPort }}
     name: {{ .Values.apidash.service.name }}
   selector:
-    app: {{  .Chart.Name }}-{{ .Values.apidash.service.name}}
+    app: {{ .Values.apidash.deployment.name }}
     release: {{ .Release.Name }}
 
 ---
@@ -33,7 +33,7 @@ spec:
   - port: {{ .Values.apiauth.service.internalPort }}
     name: {{ .Values.apiauth.service.name }}
   selector:
-    app: {{  .Chart.Name }}-{{ .Values.apiauth.service.name}}
+    app: {{ .Values.apiauth.deployment.name }}
     release: {{ .Release.Name }}
 
 ---
@@ -53,6 +53,6 @@ spec:
   - port: {{ .Values.apimain.service.internalPort }}
     name: {{ .Values.apimain.service.name }}
   selector:
-    app: {{  .Chart.Name }}-{{ .Values.apimain.service.name}}
+    app: {{ .Values.apimain.deployment.name }}
     release: {{ .Release.Name }}
 
