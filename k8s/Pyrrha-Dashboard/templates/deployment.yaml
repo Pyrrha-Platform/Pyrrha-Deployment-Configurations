@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: {{ template "fullname" . }}-{{ .Values.apidash.deployment.name}}
   labels:
-    app: {{ template "name" . }}
+    app: {{ template "name" . }}-{{ .Values.apidash.deployment.name}}
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.apidash.deployment.replicaCount }}
   selector:
     matchLabels:
       app: {{ template "name" . }}
@@ -20,41 +20,112 @@ spec:
         release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
-        - name: {{ .Values.image.pullSecret }}
+        - name: {{ .Values.apidash.image.pullSecret }}
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.apidash.container.name }}
+          image: "{{ .Values.apidash.image.repository }}:{{ .Values.apidash.image.tag }}"
+          imagePullPolicy: {{ .Values.apidash.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.internalPort }}
+            - containerPort: {{ .Values.apidash.service.internalPort }}
+          resources:
+{{ toYaml .Values.apidash.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-{{ .Values.apiauth.deployment.name}}
+  labels:
+    app: {{ template "name" . }}-{{ .Values.apiauth.deployment.name}}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.apiauth.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.apiauth.image.pullSecret }}
+      containers:
+        - name: {{ .Values.apiauth.container.name }}
+          image: "{{ .Values.apiauth.image.repository }}:{{ .Values.apiauth.image.tag }}"
+          imagePullPolicy: {{ .Values.apiauth.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.apiauth.service.internalPort }}
+          resources:
+{{ toYaml .Values.apiauth.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-{{ .Values.apimain.deployment.name}}
+  labels:
+    app: {{ template "name" . }}-{{ .Values.apimain.deployment.name}}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.apimain.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.apimain.image.pullSecret }}
+      containers:
+        - name: {{ .Values.apimain.container.name }}
+          image: "{{ .Values.apimain.image.repository }}:{{ .Values.apimain.image.tag }}"
+          imagePullPolicy: {{ .Values.apimain.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.apimain.service.internalPort }}
           env:
             - name: MARIADB_HOST
               valueFrom:
                 secretKeyRef:
-                  name: rulesdecision-secret
+                  name: api-main-secret
                   key: MARIADB_HOST
-            - name: MARIADB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: rulesdecision-secret
-                  key: MARIADB_PORT
             - name: MARIADB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: rulesdecision-secret
+                  name: api-main-secret
                   key: MARIADB_USERNAME
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: rulesdecision-secret
+                  name: api-main-secret
                   key: MARIADB_PASSWORD
-            - name: MARIADB_DB
+            - name: MARIADB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: rulesdecision-secret
-                  key: MARIADB_DB
+                  name: api-main-secret
+                  key: MARIADB_PORT
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.apimain.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}

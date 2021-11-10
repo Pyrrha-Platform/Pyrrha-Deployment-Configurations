@@ -1,16 +1,66 @@
-api-dash:
+apidash:
   image:
-    repository: uk.icr.io/prometeo-cfc-cluster/rulesdecision
+    repository: uk.icr.io/prometeo-cluster/api-dash
     tag: latest
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
     #pullPolicy: Never
   service:
-    name: rulesdecision-service
+    name: api-dash-service
     type: ClusterIP
-    internalPort: 8080
-    externalPort: 8080
+    internalPort: 80
+    externalPort: 80
+  container:
+    name: api-dash
+  deployment: 
+    name: api-dash
+    replicaCount: 1
+
+  ingress:
+    enabled: false
+    # Used to create an Ingress record.
+    # hosts:
+    #   - prometeo-eu-gb-3-bx2-2x8-514bd37ab295f8aeaf548c9dacf39708-0000.eu-gb.containers.appdomain.cloud
+    # annotations:
+    #   kubernetes.io/ingress.class: "public-iks-k8s-nginx"
+    #   nginx.ingress.kubernetes.io/rewrite-target: /
+    # tls:
+      # Secrets must be manually created in the namespace.
+      # - secretName: chart-example-tls
+      #   hosts:
+      #     - chart-example.local
+  resources:
+    {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+apiauth:
+  image:
+    repository: uk.icr.io/prometeo-cluster/api-auth
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never
+  service:
+    name: api-auth-service
+    type: ClusterIP
+    internalPort: 4000
+    externalPort: 4000
+  container:
+    name: api-auth
+  deployment: 
+    name: api-auth
+    replicaCount: 1
   ingress:
     enabled: false
     # Used to create an Ingress record.
@@ -37,58 +87,24 @@ api-dash:
     #  cpu: 100m
     #  memory: 128Mi
 
-api-auth:
+apimain:
   image:
-    repository: uk.icr.io/prometeo-cfc-cluster/rulesdecision
+    repository: uk.icr.io/prometeo-cluster/api-main
     tag: latest
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
     #pullPolicy: Never
   service:
-    name: rulesdecision-service
+    name: api-main-service
     type: ClusterIP
-    internalPort: 8080
-    externalPort: 8080
-  ingress:
-    enabled: false
-    # Used to create an Ingress record.
-    hosts:
-      - prometeo-eu-gb-3-bx2-2x8-514bd37ab295f8aeaf548c9dacf39708-0000.eu-gb.containers.appdomain.cloud
-    annotations:
-      kubernetes.io/ingress.class: "public-iks-k8s-nginx"
-      nginx.ingress.kubernetes.io/rewrite-target: /
-    tls:
-      # Secrets must be manually created in the namespace.
-      # - secretName: chart-example-tls
-      #   hosts:
-      #     - chart-example.local
-  resources:
-    {}
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #  cpu: 100m
-    #  memory: 128Mi
-    # requests:
-    #  cpu: 100m
-    #  memory: 128Mi
-
-api-main:
-  image:
-    repository: uk.icr.io/prometeo-cfc-cluster/rulesdecision
-    tag: latest
-    pullSecret: all-icr-io
-    pullPolicy: IfNotPresent
-    # for local development against Minikube registry
-    #pullPolicy: Never
-  service:
-    name: rulesdecision-service
-    type: ClusterIP
-    internalPort: 8080
-    externalPort: 8080
+    internalPort: 5000
+    externalPort: 5000
+  container:
+    name: api-main
+  deployment: 
+    name: api-main
+    replicaCount: 1
   ingress:
     enabled: false
     # Used to create an Ingress record.
