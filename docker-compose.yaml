@@ -111,7 +111,7 @@ services:
     container_name: pyrrha-simulator
     build:
       context: ../Pyrrha-Sensor-Simulator/action
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: pyrrha-simulator
     env_file:
       - ../Pyrrha-Sensor-Simulator/action/.env.docker
