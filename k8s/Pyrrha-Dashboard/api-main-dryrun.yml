@@ -29,7 +29,7 @@ metadata:
     release: api-main
     heritage: Helm
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
       app: api-main
@@ -69,3 +69,8 @@ spec:
                 secretKeyRef:
                   name: api-main-secret
                   key: MARIADB_PORT
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_DATABASE
