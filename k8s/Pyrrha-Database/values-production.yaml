@@ -319,7 +319,7 @@ primary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "ibmc-block-silver"
+    storageClass: "ibmc-vpc-block-retain-general-purpose"
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
@@ -597,7 +597,7 @@ secondary:
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
     ##
-    storageClass: "ibmc-block-silver"
+    storageClass: "ibmc-vpc-block-retain-general-purpose"
     ## Persistent Volume Claim annotations
     ##
     annotations: {}
