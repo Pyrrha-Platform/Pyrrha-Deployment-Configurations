@@ -85,39 +85,39 @@ services:
     restart: always
     ports:
       - "4000:4000"
-  pyrrha-dashboard:
-    container_name: pyrrha-dashboard
-    build:
-      context: ../Pyrrha-Dashboard/pyrrha-dashboard
-      dockerfile: Dockerfile.dev
-    depends_on:
-      - pyrrha-api-auth
-      - pyrrha-api-main
-      - pyrrha-mqttclient
-      - pyrrha-rulesdecision
-    image: pyrrha-dashboard
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - REACT_APP_MAIN_PROXY=http://pyrrha-api-main:5000
-      - REACT_APP_AUTH_PROXY=http://pyrrha-api-auth:4000
-      - REACT_APP_WEBSOCKET_URL=ws://localhost:8080
-    volumes:
-      - /app/node_modules
-      - ../Pyrrha-Dashboard/pyrrha-dashboard:/app
-    stdin_open: true
-  pyrrha-simulator:
-    container_name: pyrrha-simulator
-    build:
-      context: ../Pyrrha-Sensor-Simulator/action
-      dockerfile: Dockerfile.dev
-    image: pyrrha-simulator
-    env_file:
-      - ../Pyrrha-Sensor-Simulator/action/.env.docker
-    restart: always
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - /user-app/node_modules
-      - ../Pyrrha-Sensor-Simulator/action:/user-app
+  #pyrrha-dashboard:
+  #  container_name: pyrrha-dashboard
+  #  build:
+  #    context: ../Pyrrha-Dashboard/pyrrha-dashboard
+  #    dockerfile: Dockerfile.dev
+  #  depends_on:
+  #    - pyrrha-api-auth
+  #    - pyrrha-api-main
+  #    - pyrrha-mqttclient
+  #    - pyrrha-rulesdecision
+  #  image: pyrrha-dashboard
+  #  restart: always
+  #  ports:
+  #    - "3000:3000"
+  #  environment:
+  #    - REACT_APP_MAIN_PROXY=http://pyrrha-api-main:5000
+  #    - REACT_APP_AUTH_PROXY=http://pyrrha-api-auth:4000
+  #    - REACT_APP_WEBSOCKET_URL=ws://localhost:8080
+  #  volumes:
+  #    - /app/node_modules
+  #    - ../Pyrrha-Dashboard/pyrrha-dashboard:/app
+  #  stdin_open: true
+  #pyrrha-simulator:
+  #  container_name: pyrrha-simulator
+  #  build:
+  #    context: ../Pyrrha-Sensor-Simulator/action
+  #    dockerfile: Dockerfile.dev
+  #  image: pyrrha-simulator
+  #  env_file:
+  #    - ../Pyrrha-Sensor-Simulator/action/.env.docker
+  #  restart: always
+  #  environment:
+  #    - NODE_ENV=development
+  #  volumes:
+  #    - /user-app/node_modules
+  #    - ../Pyrrha-Sensor-Simulator/action:/user-app
