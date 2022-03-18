@@ -1,18 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "mychart.name" . }}
+  name: {{ template "fullname" . }}
   labels:
-    {{- include "mychart.labels" . | nindent 4 }}
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "mychart.selectorLabels" . | nindent 6 }}
+      app: {{ template "name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        {{- include "mychart.labels" . | nindent 8 }}
+        app: {{ template "name" . }}
+        release: {{ .Release.Name }}
     spec:
       imagePullSecrets:
         - name: {{ .Values.image.pullSecret }}
