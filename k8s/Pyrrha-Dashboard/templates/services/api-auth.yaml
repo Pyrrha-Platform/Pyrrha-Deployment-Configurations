@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "apiauth.name" . }}
+  labels:
+    {{- include "apiauth.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.auth.service.type }}
+  ports:
+  - port: {{ .Values.auth.service.internalPort }}
+    name: {{ .Values.auth.service.name }}
+  selector:
+    {{- include "apiauth.selectorLabels" . | nindent 4 }}

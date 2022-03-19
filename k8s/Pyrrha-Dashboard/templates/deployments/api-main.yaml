@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "apimain.name" . }}
+  labels:
+    {{- include "apimain.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.main.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "apimain.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "apimain.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.main.image.pullSecret }}
+      containers:
+        - name: {{ template "apimain.name" . }}
+          image: "{{ .Values.main.image.repository }}:{{ .Values.main.image.tag }}"
+          imagePullPolicy: {{ .Values.main.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.main.service.internalPort }}
+          env:
+            - name: MARIADB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_HOST
+            - name: MARIADB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_PORT
+            - name: MARIADB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_USERNAME
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_PASSWORD
+            - name: MARIADB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_PORT
+            - name: MARIADB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: api-main-secret
+                  key: MARIADB_DATABASE
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
