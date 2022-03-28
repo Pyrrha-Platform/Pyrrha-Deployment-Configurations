@@ -1,0 +1,82 @@
+# the image properties get overwritten by the IKS toolchain
+auth:
+  name: api-auth
+  image:
+    repository: de.icr.io/prometeo-dev/api-auth
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  service:
+    type: ClusterIP
+    name: tcp
+    internalPort: 4000
+    externalPort: 4000
+  replicaCount: 1
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+
+main:
+  name: api-main
+  image:
+    repository: de.icr.io/prometeo-dev/api-main
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  service:
+    type: ClusterIP
+    name: tcp
+    internalPort: 5000
+    externalPort: 5000
+  replicaCount: 1
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+dash:
+  name: dash
+  image:
+    repository: de.icr.io/prometeo-dev/dash
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  service:
+    type: ClusterIP
+    name: tcp
+    internalPort: 80
+    externalPort: 80
+  replicaCount: 1
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi

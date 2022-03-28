@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "dash.name" . }}
+  labels:
+    {{- include "dash.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.dash.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "dash.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dash.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.dash.image.pullSecret }}
+      containers:
+        - name: {{ template "dash.name" . }}
+          image: "{{ .Values.dash.image.repository }}:{{ .Values.dash.image.tag }}"
+          imagePullPolicy: {{ .Values.dash.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.dash.service.internalPort }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}

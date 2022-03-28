@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "apimain.name" . }}
+  labels:
+    {{- include "apimain.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.main.service.type }}
+  ports:
+  - port: {{ .Values.main.service.internalPort }}
+    name: {{ .Values.main.service.name }}
+  selector:
+    {{- include "apimain.selectorLabels" . | nindent 4 }}
