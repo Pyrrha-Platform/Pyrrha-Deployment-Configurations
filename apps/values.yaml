@@ -1,0 +1,7 @@
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/Pyrrha-Platform/Pyrrha-Deployment-Configurations
+    targetRevision: UL-argocd
+    path: apps
