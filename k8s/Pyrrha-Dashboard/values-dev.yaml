@@ -80,3 +80,82 @@ dash:
     # requests:
     #  cpu: 100m
     #  memory: 128Mi
+
+rulesdecision:
+  name: rulesdecision
+  image:
+    repository: de.icr.io/prometeo-dev/rulesdecision
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  service:
+    type: ClusterIP
+    internalPort: 8080
+    externalPort: 8080
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #  cpu: 100m
+    #  memory: 128Mi
+    # requests:
+    #  cpu: 100m
+    #  memory: 128Mi
+
+mqttclient:
+  name: mqttclient
+  image:
+    repository: de.icr.io/prometeo-dev/mqttclient
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  service:
+    type: ClusterIP
+    internalPort: 8080
+    externalPort: 8080
+  resources: {}
+
+ws:
+  name: ws
+  image:
+    repository: de.icr.io/prometeo-dev/ws
+    tag: latest
+    pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never  
+  replicaCount: 1
+  service:
+    # name: ws-service
+    type: ClusterIP
+    internalPort: 8080
+  resources: {}
+
+mqttserver:
+  name: mqttserver
+  image:
+    repository: vernemq/vernemq
+    tag: 1.12.3
+    # pullSecret: all-icr-io
+    pullPolicy: IfNotPresent
+    # for local development against Minikube registry
+    #pullPolicy: Never 
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    epmd:
+      port: 4369
+      name: epmd
+    vmq:
+      port: 44053
+      name: vmq
+    tcpMqtt:
+      port: 1883
+      name: tcp-mqtt
+  resources: {}

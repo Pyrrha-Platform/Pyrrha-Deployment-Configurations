@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "mychart.name" . }}
+  labels:
+    {{- include "mychart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "mychart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "mychart.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecret }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          # volumeMounts:
+          #   - name: ca-pemstore
+          #     mountPath: /etc/ssl/certs/messaging.pem
+          #     subPath: messaging.pem
+          #     readOnly: false
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.epmd.port }}
+              name: {{ .Values.service.epmd.name }}
+            - containerPort: {{ .Values.service.vmq.port }}
+              name: {{ .Values.service.vmq.name }}
+            - containerPort: {{ .Values.service.httpDashboard.port }}
+              name: {{ .Values.service.httpDashboard.name }}
+            - containerPort: {{ .Values.service.tcpMqtt.port }}
+              name: {{ .Values.service.tcpMqtt.name }}
+            - containerPort: 9100
+            - containerPort: 9101
+            - containerPort: 9102
+            - containerPort: 9103
+            - containerPort: 9104
+            - containerPort: 9105
+            - containerPort: 9106
+            - containerPort: 9107
+            - containerPort: 9108
+            - containerPort: 9109
+          env:
+            - name: DOCKER_VERNEMQ_ACCEPT_EULA
+              value: "yes"
+            - name: DOCKER_VERNEMQ_ALLOW_ANONYMOUS
+              value: "off"
+            - name: DOCKER_VERNEMQ_listener__tcp__allowed_protocol_versions
+              value: "3,4,5"
+            - name: DOCKER_VERNEMQ_allow_register_during_netsplit
+              value: "on"
+            - name: DOCKER_VERNEMQ_DISCOVERY_KUBERNETES
+              value: "1"
+            - name: DOCKER_VERNEMQ_KUBERNETES_APP_LABEL
+              value: "vernemq"
+            - name: DOCKER_VERNEMQ_KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: DOCKER_VERNEMQ_ERLANG__DISTRIBUTION__PORT_RANGE__MINIMUM
+              value: "9100"
+            - name: DOCKER_VERNEMQ_ERLANG__DISTRIBUTION__PORT_RANGE__MAXIMUM
+              value: "9109"
+            - name: DOCKER_VERNEMQ_KUBERNETES_INSECURE
+              value: "1"
+            - name: DOCKER_VERNEMQ_PLUGINS__VMQ_DIVERSITY
+              value: "on"
+            - name: DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD
+              value: "off"
+            - name: DOCKER_VERNEMQ_PLUGINS__VMQ_ACL
+              value: "off"
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__AUTH_MYSQL__ENABLED
+              value: "on"
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-server-secret
+                  key: MARIADB_HOST
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-server-secret
+                  key: MARIADB_PORT
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__USER
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-server-secret
+                  key: MARIADB_USER
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-server-secret
+                  key: MARIADB_PASSWORD
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mqtt-server-secret
+                  key: MARIADB_DATABASE
+            - name: DOCKER_VERNEMQ_VMQ_DIVERSITY__MYSQL__PASSWORD_HASH_METHOD
+              value: "sha256"
+          resources:
+            {{ toYaml .Values.resources | indent 12 }}
+                {{- if .Values.nodeSelector }}
+                  nodeSelector:
+            {{ toYaml .Values.nodeSelector | indent 8 }}
+                {{- end }}
+      # volumes:
+      #   - name: ca-pemstore
+      #     configMap:
+      #       name: ca-pemstore

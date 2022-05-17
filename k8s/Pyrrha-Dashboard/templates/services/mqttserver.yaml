@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mqttserver.name" . }}
+  labels:
+    {{- include "mqttserver.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.mqttserver.service.type }}
+  ports:
+  - port: {{ .Values.mqttserver.service.epmd.port }}
+    name: {{ .Values.mqttserver.service.epmd.name }}
+  - port: {{ .Values.mqttserver.service.vmq.port }}
+    name: {{ .Values.mqttserver.service.vmq.name }}
+  - port: {{ .Values.mqttserver.service.tcpMqtt.port }}
+    name: {{ .Values.mqttserver.service.tcpMqtt.name }}
+  selector:
+    {{- include "mqttserver.selectorLabels" . | nindent 4 }}

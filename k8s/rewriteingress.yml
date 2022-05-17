@@ -26,8 +26,8 @@ spec:
             pathType: Prefix
           - backend:
               service:
-                name: dashboard-api-dash-service
+                name: dash
                 port:
                   number: 80
-            path: /api-dash(/|$)(.*)
+            path: /dash(/|$)(.*)
             pathType: Prefix

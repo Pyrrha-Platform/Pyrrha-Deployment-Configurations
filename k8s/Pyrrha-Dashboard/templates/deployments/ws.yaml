@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ws.name" . }}
+  labels:
+    {{- include "ws.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.ws.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ws.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ws.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.ws.image.pullSecret }}
+      containers:
+        - name: {{ template "ws.name" . }}
+          image: "{{ .Values.ws.image.repository }}:{{ .Values.ws.image.tag }}"
+          imagePullPolicy: {{ .Values.ws.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ws.service.internalPort }}
+          resources:
+{{ toYaml .Values.ws.resources | indent 12 }}
+    {{- if .Values.ws.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.ws.nodeSelector | indent 8 }}
+    {{- end }}
