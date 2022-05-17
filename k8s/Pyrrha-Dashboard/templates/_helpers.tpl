@@ -18,6 +18,22 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.dash.name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "mqttclient.name" -}}
+{{- default .Chart.Name .Values.mqttclient.name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "rulesdecision.name" -}}
+{{- default .Chart.Name .Values.rulesdecision.name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "ws.name" -}}
+{{- default .Chart.Name .Values.ws.name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "mqttserver.name" -}}
+{{- default .Chart.Name .Values.mqttserver.name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -81,6 +97,52 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
+{{- define "mqttclient.labels" -}}
+app: {{ include "mychart.name" . }}-{{ .Values.mqttclient.name }}
+helm.sh/chart: {{ include "mychart.chart" . }}
+{{ include "mqttclient.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+version: {{ .Values.mqttclient.image.tag | default .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "rulesdecision.labels" -}}
+app: {{ include "mychart.name" . }}-{{ .Values.rulesdecision.name }}
+helm.sh/chart: {{ include "mychart.chart" . }}
+{{ include "rulesdecision.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+version: {{ .Values.rulesdecision.image.tag | default .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "ws.labels" -}}
+app: {{ include "mychart.name" . }}-{{ .Values.ws.name }}
+helm.sh/chart: {{ include "mychart.chart" . }}
+{{ include "ws.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+version: {{ .Values.ws.image.tag | default .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "mqttserver.labels" -}}
+app: {{ include "mychart.name" . }}-{{ .Values.mqttserver.name }}
+helm.sh/chart: {{ include "mychart.chart" . }}
+{{ include "mqttserver.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+version: {{ .Values.mqttserver.image.tag | default .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+
+
 {{/*
 Selector labels
 */}}
@@ -104,4 +166,22 @@ app.kubernetes.io/name:  {{ .Values.auth.name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
+{{- define "mqttclient.selectorLabels" -}}
+app.kubernetes.io/name:  {{ .Values.mqttclient.name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 
+{{- define "rulesdecision.selectorLabels" -}}
+app.kubernetes.io/name:  {{ .Values.rulesdecision.name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "ws.selectorLabels" -}}
+app.kubernetes.io/name:  {{ .Values.ws.name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "mqttserver.selectorLabels" -}}
+app.kubernetes.io/name:  {{ .Values.mqttserver.name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "rulesdecision.name" . }}
+  labels:
+    {{- include "rulesdecision.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.rulesdecision.service.type }}
+  ports:
+  - port: {{ .Values.rulesdecision.service.internalPort }}
+    name: {{ .Values.rulesdecision.service.name }}
+  selector:
+    {{- include "rulesdecision.selectorLabels" . | nindent 4 }}

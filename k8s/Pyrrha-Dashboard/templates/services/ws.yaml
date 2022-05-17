@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "ws.name" . }}
+  labels:
+    {{- include "ws.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.ws.service.type }}
+  ports:
+  - port: {{ .Values.ws.service.internalPort }}
+    name: {{ .Values.ws.service.name }}
+  selector:
+    {{- include "ws.selectorLabels" . | nindent 4 }}

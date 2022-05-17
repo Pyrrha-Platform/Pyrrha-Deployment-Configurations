@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqttserviceexternal
+  labels:
+    {{- include "mychart.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer
+  ports:
+  - port: {{ .Values.service.tcpMqtt.port }}
+    targetPort: {{ .Values.service.tcpMqtt.port }}
+    name: {{ .Values.service.tcpMqtt.name }}
+    protocol: TCP
+  selector:
+    {{- include "mychart.selectorLabels" . | nindent 4 }}

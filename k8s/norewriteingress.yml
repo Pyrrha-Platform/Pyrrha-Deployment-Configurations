@@ -11,14 +11,14 @@ spec:
         paths:
           - backend:
               service:
-                name: dashboard-api-main-service
+                name: api-main
                 port:
                   number: 5000
             path: /api-main(/|$)(.*)
             pathType: Prefix
           - backend:
               service:
-                name: dashboard-api-auth-service
+                name: api-auth
                 port:
                   number: 4000
             path: /api-auth(/|$)(.*)

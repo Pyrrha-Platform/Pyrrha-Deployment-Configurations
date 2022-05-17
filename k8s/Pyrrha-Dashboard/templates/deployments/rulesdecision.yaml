@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "rulesdecision.name" . }}
+  labels:
+    {{- include "rulesdecision.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.rulesdecision.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "rulesdecision.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "rulesdecision.labels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.rulesdecision.image.pullSecret }}
+      containers:
+        - name: {{ template "rulesdecision.name" . }}
+          image: "{{ .Values.rulesdecision.image.repository }}:{{ .Values.rulesdecision.image.tag }}"
+          imagePullPolicy: {{ .Values.rulesdecision.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.rulesdecision.service.internalPort }}
+          env:
+            - name: MARIADB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_HOST
+            - name: MARIADB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_PORT
+            - name: MARIADB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_USERNAME
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_PASSWORD
+            - name: MARIADB_DB
+              valueFrom:
+                secretKeyRef:
+                  name: rulesdecision-secret
+                  key: MARIADB_DB
+          resources:
+{{ toYaml .Values.rulesdecision.resources | indent 12 }}
+    {{- if .Values.rulesdecision.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.rulesdecision.nodeSelector | indent 8 }}
+    {{- end }}
