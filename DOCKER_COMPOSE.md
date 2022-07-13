@@ -233,6 +233,12 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
    }
    ```
 
+3. Using the Client ID, Password, and Device ID information from the last step, you will need to insert records into the `vmq_auth_acl` table referenced in the [pyrrha-mqttclient](#pyrrha-mqttclient) section. Follow the steps there to connect to the database to run the below insert statement. The inserts should be in the following format. Be sure to replace `CLIENTID`, `USERNAME`, and `PASSWORD` with the values for each device. 
+
+```sql
+INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, publish_acl) VALUES ('', 'CLIENTID', 'USERNAME', SHA2('PASSWORD', 256), '[{"pattern":"iot-2/#"}]');
+```
+
 ## Deployment
 
 The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configurations` directory.
