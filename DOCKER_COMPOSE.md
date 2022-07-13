@@ -4,6 +4,7 @@ Docker Compose is a tool for defining and running multi-container Docker applica
 
 - **pyrrha-mariadb**: the database that holds all the Pyrrha data
 - **pyrrha-wss**: the WebSocket server
+- **pyrrha-mqttserver**: an MQTT broker service that uses VerneMQ
 - **pyrrha-mqttclient**: the service that sits between the IoT platform and other services
 - **pyrrha-rulesdecision**: the analytics service that calculates the time weighted averages of all data
 - **pyrrha-api-main**: the API backend for the dashboard
@@ -20,6 +21,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 - [Configuration](#configuration)
   - [pyrrha-mariadb](#pyrrha-mariadb)
   - [pyrrha-wss](#pyrrha-wss)
+  - [pyrrha-mqttserver](#pyrrha-mqttserver)
   - [pyrrha-mqttclient](#pyrrha-mqttclient)
   - [pyrrha-rulesdecision](#pyrrha-rulesdecision)
   - [pyrrha-api-main](#pyrrha-api-main)
@@ -42,16 +44,11 @@ The `docker-compose.yaml` file defines and configures all of these services.
 
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
-  - Ensure you have docker installed by using `docker-compose --version` command. You should see output as follows:
-
-    ```bash
-    docker-compose version 1.27.4, build 40524192
-    ```
+  - Docker Compose is a plugin that comes as a part of Docker Desktop. You can verify this by running `docker` and checking the Management Commands section. On Linux, you will need to follow the instructions to install Compose, available at the link above.
 
 ### IBM Cloud
 
 - Sign up for an [IBM Cloud account](https://cloud.ibm.com/registration).
-- Create [IBM IoT service](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md) and copy the application credentials as [detailed here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md).
 - Create [IBM App ID service](https://cloud.ibm.com/catalog/services/app-id) and make note of the credentials.
 
 ## Configuration
@@ -80,7 +77,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
    export MDB_PASSWORD=example
    ```
 
-   Optionally, you can add this line to `bashrc` or `.zshrc` file so it is automatically set whenever a terminal is opened.
+   Optionally, you can add this line to `.bashrc` or `.zshrc` file so it is automatically set whenever a terminal is opened.
 
 Let's configure each of the services.
 
@@ -92,27 +89,60 @@ Let's configure each of the services.
 
 1. No additional configuration required
 
+### pyrrha-mqttserver
+
+Pyrrha Platform makes use of VerneMQ as its MQTT broker of choice. It is high performance, open source, supports authentication, and supports containers and Kubernetes. More information can be found at [their website](https://vernemq.com/).
+
+By default, the broker is configured to use database authentication. You can see the configuration in the `docker-compose.yaml` file under `pyrrha-mqttserver` > `environment`. 
+It is recommended to leverage authentication for this service so only applications and devices you control can access the MQTT broker service.
+
+A database table is included in the MariaDB configuration called `vmq_auth_acl`. This is the required table for the broker service to authenticate against. You can read more details about it [here](https://docs.vernemq.com/configuring-vernemq/db-auth#mysql).
+
 ### pyrrha-mqttclient
+
+The first step for configuration is to create a record in the `vmq_auth_acl` table as was mentioned in the MQTT broker section. In order to do this:
+
+   - Ensure the `MDB_PASSWORD` variable is set in your command line session.
+
+   - Run the following command. This will start the database service. `docker compose up -d pyrrha-mariadb`
+
+   - Run the following command to get the ID of the running container for `pyrrha-mariadb`. `docker container ls`
+
+   - Run this command to enter into the running `pyrrha-mariadb` container. Replace `CONTAINERID` with the ID found in the last step. `docker exec -it CONTAINERID /bin/bash`
+
+   - Once in the container, run the following command. This will enter you into the MariaDB session. `mysql -uroot -p`. You will need the `MDB_PASSWORD` value. 
+
+   - Once in the database service, you can check which databases are available with `show databases;` (note the semicolon). Ensure `pyrrha` shows in the list. Run `use pyrrha;` (note the semicolon) to switch to that database. 
+
+   - You will need to run an INSERT statement similar to the following. You will fill in the `CLIENTID`, `USERNAME`, and `PASSWORD` items yourself. Also make note of these 3 pieces of information as they will be used to fill in values in `Pyrrha-MQTT-Client/.env.docker`. 
+
+```sql
+INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, subscribe_acl) VALUES ('', 'CLIENTID', 'USERNAME', SHA2('PASSWORD', 256), '[{"pattern":"iot-2/#"}]');
+```
+
+   - After successful insert, you can verify the data was inserted by running `SELECT * FROM vmq_auth_acl;` to see the information. When finished, you can type `\q` and press ENTER to leave the mysql console. 
+
+   - Type `exit` and press ENTER to leave the container. 
+
+---
+
+Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
 
 1. Fill in the values in `Pyrrha-MQTT-Client/.env.docker` file. You need to fill out:
 
-   - orgid in `IOT_HOST` and `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
-   - IOT_USERNAME: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
-   - IOT_PASSWORD: obtain from app credentials in the IoT platform. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-an-application-to-ibm-watson-iot-platform).
+   - `IOT_CLIENTID`, `IOT_USERNAME`, and `IOT_PASSWORD` with the values entered in the last steps.
 
    You can leave the rest of the values the same:
 
    ```bash
-   # IBM IoT
-   IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
-   IOT_TOPIC=iot-2/type/+/id/+/evt/+/fmt/+
-   IOT_PROTOCOL=mqtts
+   IOT_HOST=pyrrha-mqttserver
+   IOT_TOPIC=iot-2/#
+   IOT_PROTOCOL=mqtt
+   IOT_PORT=1883
+   IOT_SECURE_PORT=1883
+   IOT_CLIENTID=someclientid
    IOT_USERNAME=
    IOT_PASSWORD=
-   IOT_SECURE_PORT=8883
-   IOT_PORT=1883
-   IOT_CLIENTID=a:orgid:my_app
-   IOT_PEM=messaging.pem
    ```
 
    Leave the database section as follows:
@@ -131,8 +161,6 @@ Let's configure each of the services.
    WS_HOST=pyrrha-wss
    WS_PORT=8080
    ```
-
-2. Download messaging.pem file from [here](https://raw.githubusercontent.com/ibm-watson-iot/iot-python/master/src/wiotp/sdk/messaging.pem) into the root `Pyrrha-MQTT-Client` directory.
 
 ### pyrrha-rulesdecision
 
@@ -184,29 +212,21 @@ Let's configure each of the services.
 1. Ensure the `Pyrrha-Sensor-Simulator/action/.env.docker` file exists and contains the following variables:
 
    ```bash
-   IOT_HOST=orgid.messaging.internetofthings.ibmcloud.com
-   IOT_PROTOCOL=mqtts
-   IOT_USERNAME=use-token-auth
-   IOT_SECURE_PORT=8883
-   IOT_PEM=messaging.pem
+   IOT_HOST=pyrrha-mqttserver
+   IOT_PROTOCOL=mqtt
+   IOT_SECURE_PORT=1883
    ```
 
-   Replace `orgid` with your IoT organization id. See details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
+2. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
 
-2. Download messaging.pem file from [here](https://raw.githubusercontent.com/ibm-watson-iot/iot-python/master/src/wiotp/sdk/messaging.pem) into the `Pyrrha-Sensor-Simulator/action` directory.
-
-3. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
-
-   - orgid in `IOT_CLIENTID`: see details on how to obtain orgid [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#obtain-organization-id-from-the-iot-platform).
-   - device-type in `IOT_CLIENTID`: type you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
-   - device-id in `IOT_CLIENTID`: is you assigned to the device on the IBM IoT platform. See [instructions](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform) for more details.
-   - IOT_PASSWORD: the token that is generated for you when you add a new device. See details [here](https://github.com/Pyrrha-Platform/Pyrrha/blob/main/WATSON_IOT_SETUP.md#connect-a-pyrrha-device-to-ibm-watson-iot-platform).
+   - `IOT_CLIENTID`: a unique identifier for the device
+   - `IOT_DEVICE_ID`: an identifier for the device. This is the "username" for this device. This field can be the same as `IOT_CLIENTID`
+   - `IOT_PASSWORD`: a unique password for this device
    - IOT_FIREFIGHTER_ID: unique GUID like format. You can use a [service like this](https://duckduckgo.com/?q=generate+guid&ia=answer) to generate it.
-   - IOT_DEVICE_ID: if you want to use the devices in the seed pyrrha database, use one of the following for each device: `Prometeo:00:00:00:00:00:01`, `Prometeo:00:00:00:00:00:02`, `Prometeo:00:00:00:00:00:03`, and `Prometeo:00:00:00:00:00:04`. These have been already filled out for you, but you can add more devices as well.
 
    ```json
    {
-     "IOT_CLIENTID": "d:orgid:device-type:device-id",
+     "IOT_CLIENTID": "device-id",
      "IOT_PASSWORD": "",
      "IOT_FIREFIGHTER_ID": "",
      "IOT_DEVICE_ID": "device-id"

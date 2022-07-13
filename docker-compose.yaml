@@ -12,6 +12,7 @@ services:
       - "3306:3306"
     volumes:
       - ../Pyrrha-Database/data:/var/lib/mysql
+    user: mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${MDB_PASSWORD}
   pyrrha-wss:
