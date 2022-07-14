@@ -114,6 +114,21 @@ The first step for configuration is to create a record in the `vmq_auth_acl` tab
 
    - Once in the database service, you can check which databases are available with `show databases;` (note the semicolon). Ensure `pyrrha` shows in the list. Run `use pyrrha;` (note the semicolon) to switch to that database. 
 
+   - Verify that the `vmq_auth_acl` table exists first. If it does not, run the follow SQL statement before continuing. Note: this is the same `CREATE TABLE` statement referenced in the VerneMQ documentation.
+
+```sql
+CREATE TABLE vmq_auth_acl
+(
+  mountpoint VARCHAR(10) NOT NULL,
+  client_id VARCHAR(128) NOT NULL,
+  username VARCHAR(128) NOT NULL,
+  password VARCHAR(128),
+  publish_acl TEXT,
+  subscribe_acl TEXT,
+  CONSTRAINT vmq_auth_acl_primary_key PRIMARY KEY (mountpoint, client_id, username)
+);
+```
+
    - You will need to run an INSERT statement similar to the following. You will fill in the `CLIENTID`, `USERNAME`, and `PASSWORD` items yourself. Also make note of these 3 pieces of information as they will be used to fill in values in `Pyrrha-MQTT-Client/.env.docker`. 
 
 ```sql
