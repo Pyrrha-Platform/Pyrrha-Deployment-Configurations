@@ -114,7 +114,7 @@ The first step for configuration is to create a record in the `vmq_auth_acl` tab
 
    - Once in the database service, you can check which databases are available with `show databases;` (note the semicolon). Ensure `pyrrha` shows in the list. Run `use pyrrha;` (note the semicolon) to switch to that database. 
 
-   - Verify that the `vmq_auth_acl` table exists first. If it does not, run the follow SQL statement before continuing. Note: this is the same `CREATE TABLE` statement referenced in the VerneMQ documentation.
+   - Verify that the `vmq_auth_acl` table exists first using `show tables;`. If it does not, run the follow SQL statement before continuing. Note: this is the same `CREATE TABLE` statement referenced in the VerneMQ documentation.
 
 ```sql
 CREATE TABLE vmq_auth_acl
