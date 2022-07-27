@@ -93,7 +93,7 @@ Let's configure each of the services.
 
 Pyrrha Platform makes use of VerneMQ as its MQTT broker of choice. It is high performance, open source, supports authentication, and supports containers and Kubernetes. More information can be found at [their website](https://vernemq.com/).
 
-By default, the broker is configured to use database authentication. You can see the configuration in the `docker-compose.yaml` file under `pyrrha-mqttserver` > `environment`. 
+By default, the broker is configured to use database authentication. You can see the configuration in the `docker-compose.yaml` file under `pyrrha-mqttserver` > `environment`.
 It is recommended to leverage authentication for this service so only applications and devices you control can access the MQTT broker service.
 
 A database table is included in the MariaDB configuration called `vmq_auth_acl`. This is the required table for the broker service to authenticate against. You can read more details about it [here](https://docs.vernemq.com/configuring-vernemq/db-auth#mysql).
@@ -102,19 +102,19 @@ A database table is included in the MariaDB configuration called `vmq_auth_acl`.
 
 The first step for configuration is to create a record in the `vmq_auth_acl` table as was mentioned in the MQTT broker section. In order to do this:
 
-   - Ensure the `MDB_PASSWORD` variable is set in your command line session.
+- Ensure the `MDB_PASSWORD` variable is set in your command line session.
 
-   - Run the following command. This will start the database service. `docker compose up -d pyrrha-mariadb`
+- Run the following command. This will start the database service. `docker compose up -d pyrrha-mariadb`
 
-   - Run the following command to get the ID of the running container for `pyrrha-mariadb`. `docker container ls`
+- Run the following command to get the ID of the running container for `pyrrha-mariadb`. `docker container ls`
 
-   - Run this command to enter into the running `pyrrha-mariadb` container. Replace `CONTAINERID` with the ID found in the last step. `docker exec -it CONTAINERID /bin/bash`
+- Run this command to enter into the running `pyrrha-mariadb` container. Replace `CONTAINERID` with the ID found in the last step. `docker exec -it CONTAINERID /bin/bash`
 
-   - Once in the container, run the following command. This will enter you into the MariaDB session. `mysql -uroot -p`. You will need the `MDB_PASSWORD` value. 
+- Once in the container, run the following command. This will enter you into the MariaDB session. `mysql -uroot -p`. You will need the `MDB_PASSWORD` value.
 
-   - Once in the database service, you can check which databases are available with `show databases;` (note the semicolon). Ensure `pyrrha` shows in the list. Run `use pyrrha;` (note the semicolon) to switch to that database. 
+- Once in the database service, you can check which databases are available with `show databases;` (note the semicolon). Ensure `pyrrha` shows in the list. Run `use pyrrha;` (note the semicolon) to switch to that database.
 
-   - Verify that the `vmq_auth_acl` table exists first using `show tables;`. If it does not, run the follow SQL statement before continuing. Note: this is the same `CREATE TABLE` statement referenced in the VerneMQ documentation.
+- Verify that the `vmq_auth_acl` table exists first using `show tables;`. If it does not, run the follow SQL statement before continuing. Note: this is the same `CREATE TABLE` statement referenced in the VerneMQ documentation.
 
 ```sql
 CREATE TABLE vmq_auth_acl
@@ -129,15 +129,15 @@ CREATE TABLE vmq_auth_acl
 );
 ```
 
-   - You will need to run an INSERT statement similar to the following. You will fill in the `CLIENTID`, `USERNAME`, and `PASSWORD` items yourself. Also make note of these 3 pieces of information as they will be used to fill in values in `Pyrrha-MQTT-Client/.env.docker`. 
+- You will need to run an INSERT statement similar to the following. You will fill in the `CLIENTID`, `USERNAME`, and `PASSWORD` items yourself. Also make note of these 3 pieces of information as they will be used to fill in values in `Pyrrha-MQTT-Client/.env.docker`.
 
 ```sql
 INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, subscribe_acl) VALUES ('', 'CLIENTID', 'USERNAME', SHA2('PASSWORD', 256), '[{"pattern":"iot-2/#"}]');
 ```
 
-   - After successful insert, you can verify the data was inserted by running `SELECT * FROM vmq_auth_acl;` to see the information. When finished, you can type `\q` and press ENTER to leave the mysql console. 
+- After successful insert, you can verify the data was inserted by running `SELECT * FROM vmq_auth_acl;` to see the information. When finished, you can type `\q` and press ENTER to leave the mysql console.
 
-   - Type `exit` and press ENTER to leave the container. 
+- Type `exit` and press ENTER to leave the container.
 
 ---
 
@@ -248,7 +248,7 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
    }
    ```
 
-3. Using the Client ID, Password, and Device ID information from the last step, you will need to insert records into the `vmq_auth_acl` table referenced in the [pyrrha-mqttclient](#pyrrha-mqttclient) section. Follow the steps there to connect to the database to run the below insert statement. The inserts should be in the following format. Be sure to replace `CLIENTID`, `USERNAME`, and `PASSWORD` with the values for each device. 
+3. Using the Client ID, Password, and Device ID information from the last step, you will need to insert records into the `vmq_auth_acl` table referenced in the [pyrrha-mqttclient](#pyrrha-mqttclient) section. Follow the steps there to connect to the database to run the below insert statement. The inserts should be in the following format. Be sure to replace `CLIENTID`, `USERNAME`, and `PASSWORD` with the values for each device.
 
 ```sql
 INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, publish_acl) VALUES ('', 'CLIENTID', 'USERNAME', SHA2('PASSWORD', 256), '[{"pattern":"iot-2/#"}]');
