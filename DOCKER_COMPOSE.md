@@ -59,19 +59,28 @@ The `docker-compose.yaml` file defines and configures all of these services.
    mkdir pyrrha && cd pyrrha
    ```
 
-2. Clone all the required repositories.
+2. Create a [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) for each of the following required repositories:
+- [Pyrrha-Deployment-Configurations](https://github.com/Pyrrha-Platform/Pyrrha-Deployment-Configurations)
+- [Pyrrha-Dashboard](https://github.com/Pyrrha-Platform/Pyrrha-Dashboard)
+- [Pyrrha-WebSocket-Server](https://github.com/Pyrrha-Platform/Pyrrha-WebSocket-Server)
+- [Pyrrha-Rules-Decision](https://github.com/Pyrrha-Platform/Pyrrha-Rules-Decision)
+- [Pyrrha-MQTT-Client](https://github.com/Pyrrha-Platform/Pyrrha-MQTT-Client)
+- [Pyrrha-Database](https://github.com/Pyrrha-Platform/Pyrrha-Database)
+- [Pyrrha-Sensor-Simulator](https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator)
+
+3. Clone all the newly created forks, using your GitHub username instead of `YOUR_USERNAME`
 
    ```bash
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Deployment-Configurations &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Dashboard &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-WebSocket-Server &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Rules-Decision &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-MQTT-Client &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Database &&
-   git clone https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Deployment-Configurations.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Dashboard.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-WebSocket-Server.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Rules-Decision.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-MQTT-Client.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Database.git &&
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Sensor-Simulator.git
    ```
 
-3. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
+4. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
 
    ```bash
    export MDB_PASSWORD=example
@@ -104,7 +113,12 @@ The first step for configuration is to create a record in the `vmq_auth_acl` tab
 
 - Ensure the `MDB_PASSWORD` variable is set in your command line session.
 
+- Ensure that you have the Docker Desktop app running.
+
+Change directory to your pyrrha/Pyrrha-Deployment-Configurations directory.
+
 - Run the following command. This will start the database service. `docker compose up -d pyrrha-mariadb`
+   - Note: if you run into the error message `Error response from daemon: invalid mount config for type "bind": bind source path does not exist: PATH_TO_PYRRHA_DIR/pyrrha/Pyrrha-Database/data`, run `mkdir data` in your `pyrrha/Pyrrha-Database/` directory. 
 
 - Run the following command to get the ID of the running container for `pyrrha-mariadb`. `docker container ls`
 
@@ -151,7 +165,7 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
 
    ```bash
    IOT_HOST=pyrrha-mqttserver
-   IOT_TOPIC=iot-2/#
+   IOT_TOPIC='iot-2/#'
    IOT_PROTOCOL=mqtt
    IOT_PORT=1883
    IOT_SECURE_PORT=1883
@@ -212,11 +226,12 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
 
 2. Provision an AppID instance in IBM Cloud - https://cloud.ibm.com/catalog/services/app-id
 3. Create AppID service credentials: In the newly created AppID instance, go to Service Credentials -> New credential. Set the role to `Writer`.
-4. Expand the created credentials and fill in the required properties in your `vcap-local.json` file located in `web/api` under `AppID` and `credentials`. You can leave the `scopes` field as an empty array.
+4. Expand the created credentials and fill in the required properties in your `vcap-local.json` file located in `web/api` under `AppID` and `credentials`. 
+For `name` under `credentials` you can use the `iam_apikey_name` value from the created credential. You can leave the `scopes` field as an empty array.
 5. Copy the `apiKey` from your service credentials and add it to `vcap-local.json` in the `api_key` field under `ibm_cloud`.
-6. `session_secret`: this can be any random string of characters.
-7. `pyrrha_api_key`: this can be any random string of characters. This is used to send authenticated requests to the API.
-8. `jwt_secret`: this can be any random string of characters.
+6. `session_secret` under `user_vars`: this can be any random string of characters.
+7. `pyrrha_api_key` under `user_vars`: this can be any random string of characters. This is used to send authenticated requests to the API.
+8. `jwt_secret` under `user_vars`: this can be any random string of characters.
 
 ### pyrrha-dashboard
 
@@ -256,7 +271,7 @@ INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, publish_acl)
 
 ## Deployment
 
-The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configurations` directory.
+The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configurations` directory and have the Docker Desktop app running.
 
 1. Run the `docker-compose build` command to build all the images. You should see the following output as the images are built one by one. The output has been truncated here for brevity.
 
