@@ -59,7 +59,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
    mkdir pyrrha && cd pyrrha
    ```
 
-2. Create a [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) for each of the following required repositories:
+1. Create a [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) for each of the following required repositories:
 
 - [Pyrrha-Deployment-Configurations](https://github.com/Pyrrha-Platform/Pyrrha-Deployment-Configurations)
 - [Pyrrha-Dashboard](https://github.com/Pyrrha-Platform/Pyrrha-Dashboard)
@@ -69,7 +69,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 - [Pyrrha-Database](https://github.com/Pyrrha-Platform/Pyrrha-Database)
 - [Pyrrha-Sensor-Simulator](https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator)
 
-3. Clone all the newly created forks, using your GitHub username instead of `YOUR_USERNAME`
+1. Clone all the newly created forks, using your GitHub username instead of `YOUR_USERNAME`
 
    ```bash
    git clone https://github.com/YOUR_USERNAME/Pyrrha-Deployment-Configurations.git &&
@@ -81,7 +81,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
    git clone https://github.com/YOUR_USERNAME/Pyrrha-Sensor-Simulator.git
    ```
 
-4. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
+1. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
 
    ```bash
    export MDB_PASSWORD=example
