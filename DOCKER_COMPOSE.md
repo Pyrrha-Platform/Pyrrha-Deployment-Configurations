@@ -106,7 +106,7 @@ Pyrrha Platform makes use of VerneMQ as its MQTT broker of choice. It is high pe
 By default, the broker is configured to use database authentication. You can see the configuration in the `docker-compose.yaml` file under `pyrrha-mqttserver` > `environment`.
 It is recommended to leverage authentication for this service so only applications and devices you control can access the MQTT broker service.
 
-A database table is included in the MariaDB configuration called `vmq_auth_acl`. This is the required table for the broker service to authenticate against. You can read more details about it [here](https://docs.vernemq.com/configuring-vernemq/db-auth#mysql).
+A database table is included in the MariaDB configuration called `vmq_auth_acl`. This is the required table for the broker service to authenticate against. [You can read more details about it here](https://docs.vernemq.com/configuring-vernemq/db-auth#mysql).
 
 ### pyrrha-mqttclient
 
