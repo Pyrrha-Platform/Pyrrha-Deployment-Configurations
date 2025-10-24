@@ -69,11 +69,15 @@ services:
     image: pyrrha-api-main
     restart: always
     ports:
-      - "5000:5000"
+      - "5001:5001"
     env_file:
       - ../Pyrrha-Dashboard/pyrrha-dashboard/api-main/.env.docker
     environment:
       - MARIADB_PASSWORD=${MDB_PASSWORD}
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    volumes:
+      - ../Pyrrha-Dashboard/pyrrha-dashboard/api-main:/app
   pyrrha-api-auth:
     container_name: pyrrha-api-auth
     build:
@@ -87,7 +91,7 @@ services:
       - "4000:4000"
   pyrrha-mqttserver:
     container_name: pyrrha-mqttserver
-    image: vernemq/vernemq:1.12.3
+    image: vernemq/vernemq:2.1.1-alpine
     restart: always
     environment:
       DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "off"
@@ -123,7 +127,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_MAIN_PROXY=http://pyrrha-api-main:5000
+      - REACT_APP_MAIN_PROXY=http://pyrrha-api-main:5001
       - REACT_APP_AUTH_PROXY=http://pyrrha-api-auth:4000
       - REACT_APP_WEBSOCKET_URL=ws://localhost:8080
     volumes:
