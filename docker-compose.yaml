@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   pyrrha-mariadb:
     container_name: pyrrha-mariadb

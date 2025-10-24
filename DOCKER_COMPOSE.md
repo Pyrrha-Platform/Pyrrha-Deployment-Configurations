@@ -39,7 +39,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
   - Ensure you have docker installed by using `docker --version` command. You should see output as follows:
 
     ```bash
-    Docker version 19.03.13, build 4484c46d9d
+    Docker version 27.3.1, build ce12230
     ```
 
 - [Docker Compose](https://docs.docker.com/compose/install/)
@@ -200,7 +200,7 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
    MARIADB_HOST=pyrrha-mariadb
    MARIADB_PORT=3306
    MARIADB_USERNAME=root
-   MARIADB_PASSWORD=$MDB_PASSWORD
+   MARIADB_PASSWORD=${MDB_PASSWORD}
    MARIADB_DB=pyrrha
    ```
 
@@ -212,8 +212,8 @@ Next, open the `Pyrrha-MQTT-Client/.env.docker` file.
    MARIADB_HOST=pyrrha-mariadb
    MARIADB_PORT=3306
    MARIADB_USERNAME=root
-   MARIADB_PASSWORD=$MDB_PASSWORD
-   MARIADB_DB=pyrrha
+   MARIADB_PASSWORD=${MDB_PASSWORD}
+   MARIADB_DATABASE=pyrrha
    ```
 
 ### pyrrha-api-auth
@@ -253,7 +253,7 @@ For `name` under `credentials` you can use the `iam_apikey_name` value from the 
    - `IOT_CLIENTID`: a unique identifier for the device
    - `IOT_DEVICE_ID`: an identifier for the device. This is the "username" for this device. This field can be the same as `IOT_CLIENTID`
    - `IOT_PASSWORD`: a unique password for this device
-   - IOT_FIREFIGHTER_ID: unique GUID like format. You can use a [service like this](https://duckduckgo.com/?q=generate+guid&ia=answer) to generate it.
+   - `IOT_FIREFIGHTER_ID`: unique GUID like format. You can use a [service like this](https://duckduckgo.com/?q=generate+guid&ia=answer) to generate it.
 
    ```json
    {
@@ -274,10 +274,10 @@ INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, publish_acl)
 
 The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configurations` directory and have the Docker Desktop app running.
 
-1. Run the `docker-compose build` command to build all the images. You should see the following output as the images are built one by one. The output has been truncated here for brevity.
+1. Run the `docker compose build` command to build all the images. You should see the following output as the images are built one by one. The output has been truncated here for brevity.
 
    ```bash
-   docker-compose build
+   docker compose build
 
    Building pyrrha-mariadb
    Step 1/2 : FROM docker.io/library/mariadb:10.3
@@ -295,6 +295,6 @@ The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configura
    ```
 
 1. Run the `docker images | grep pyrrha` command to ensure all the images were built successfully.
-1. Run the `docker-compose up` command to bring up all the services. You should see an output as follows: TBD
-1. Run the `docker-compose ps` command to ensure all the containers are up and running.
+1. Run the `docker compose up` command to bring up all the services. You should see an output as follows: TBD
+1. Run the `docker compose ps` command to ensure all the containers are up and running.
 1. You can access the dashboard at [`http://localhost:3000/`](http://localhost:3000/).
