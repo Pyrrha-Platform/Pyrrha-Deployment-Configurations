@@ -248,7 +248,7 @@ For `name` under `credentials` you can use the `iam_apikey_name` value from the 
    IOT_SECURE_PORT=1883
    ```
 
-2. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
+1. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
 
    - `IOT_CLIENTID`: a unique identifier for the device
    - `IOT_DEVICE_ID`: an identifier for the device. This is the "username" for this device. This field can be the same as `IOT_CLIENTID`
@@ -264,7 +264,7 @@ For `name` under `credentials` you can use the `iam_apikey_name` value from the 
    }
    ```
 
-3. Using the Client ID, Password, and Device ID information from the last step, you will need to insert records into the `vmq_auth_acl` table referenced in the [pyrrha-mqttclient](#pyrrha-mqttclient) section. Follow the steps there to connect to the database to run the below insert statement. The inserts should be in the following format. Be sure to replace `CLIENTID`, `USERNAME`, and `PASSWORD` with the values for each device.
+1. Using the Client ID, Password, and Device ID information from the last step, you will need to insert records into the `vmq_auth_acl` table referenced in the [pyrrha-mqttclient](#pyrrha-mqttclient) section. Follow the steps there to connect to the database to run the below insert statement. The inserts should be in the following format. Be sure to replace `CLIENTID`, `USERNAME`, and `PASSWORD` with the values for each device.
 
 ```sql
 INSERT INTO vmq_auth_acl(mountpoint, client_id, username, password, publish_acl) VALUES ('', 'CLIENTID', 'USERNAME', SHA2('PASSWORD', 256), '[{"pattern":"iot-2/#"}]');
@@ -294,7 +294,7 @@ The following commands assume you are in the `pyrrha/Pyrrha-Deployment-Configura
    ...
    ```
 
-2. Run the `docker images | grep pyrrha` command to ensure all the images were built successfully.
-3. Run the `docker-compose up` command to bring up all the services. You should see an output as follows: TBD
-4. Run the `docker-compose ps` command to ensure all the containers are up and running.
-5. You can access the dashboard at [`http://localhost:3000/`](http://localhost:3000/).
+1. Run the `docker images | grep pyrrha` command to ensure all the images were built successfully.
+1. Run the `docker-compose up` command to bring up all the services. You should see an output as follows: TBD
+1. Run the `docker-compose ps` command to ensure all the containers are up and running.
+1. You can access the dashboard at [`http://localhost:3000/`](http://localhost:3000/).
