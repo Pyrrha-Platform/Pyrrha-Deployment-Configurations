@@ -12,8 +12,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 4000
-    name: api-auth-service
+    - port: 4000
+      name: api-auth-service
   selector:
     app: api-auth
     release: api-auth
@@ -29,7 +29,7 @@ metadata:
     release: api-auth
     heritage: Helm
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
       app: api-auth
