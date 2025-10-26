@@ -7,14 +7,15 @@ auth:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   service:
     type: ClusterIP
     name: tcp
     internalPort: 4000
     externalPort: 4000
   replicaCount: 1
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -26,7 +27,6 @@ auth:
     #  cpu: 100m
     #  memory: 128Mi
 
-
 main:
   name: api-main
   image:
@@ -35,14 +35,15 @@ main:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   service:
     type: ClusterIP
     name: tcp
     internalPort: 5000
     externalPort: 5000
   replicaCount: 1
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -62,14 +63,15 @@ dash:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   service:
     type: ClusterIP
     name: tcp
     internalPort: 80
     externalPort: 80
   replicaCount: 1
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -89,12 +91,13 @@ rulesdecision:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   service:
     type: ClusterIP
     internalPort: 8080
     externalPort: 8080
-  resources: {}
+  resources:
+    {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
     # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -114,7 +117,7 @@ mqttclient:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   service:
     type: ClusterIP
     internalPort: 8080
@@ -129,7 +132,7 @@ ws:
     pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never  
+    #pullPolicy: Never
   replicaCount: 1
   service:
     # name: ws-service
@@ -145,7 +148,7 @@ mqttserver:
     # pullSecret: all-icr-io
     pullPolicy: IfNotPresent
     # for local development against Minikube registry
-    #pullPolicy: Never 
+    #pullPolicy: Never
   replicaCount: 1
   service:
     type: ClusterIP
