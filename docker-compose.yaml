@@ -137,16 +137,16 @@ services:
   pyrrha-simulator:
     container_name: pyrrha-simulator
     build:
-      context: ../Pyrrha-Sensor-Simulator/action
+      context: ../Pyrrha-Device-Simulator/action
       dockerfile: Dockerfile.dev
     image: pyrrha-simulator
     depends_on:
       - pyrrha-mqttserver
     env_file:
-      - ../Pyrrha-Sensor-Simulator/action/.env.docker
+      - ../Pyrrha-Device-Simulator/action/.env.docker
     restart: always
     environment:
       - NODE_ENV=development
     volumes:
       - /user-app/node_modules
-      - ../Pyrrha-Sensor-Simulator/action:/user-app
+      - ../Pyrrha-Device-Simulator/action:/user-app

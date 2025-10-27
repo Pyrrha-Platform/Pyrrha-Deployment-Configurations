@@ -67,7 +67,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
 - [Pyrrha-Rules-Decision](https://github.com/Pyrrha-Platform/Pyrrha-Rules-Decision)
 - [Pyrrha-MQTT-Client](https://github.com/Pyrrha-Platform/Pyrrha-MQTT-Client)
 - [Pyrrha-Database](https://github.com/Pyrrha-Platform/Pyrrha-Database)
-- [Pyrrha-Sensor-Simulator](https://github.com/Pyrrha-Platform/Pyrrha-Sensor-Simulator)
+- [Pyrrha-Device-Simulator](https://github.com/Pyrrha-Platform/Pyrrha-Device-Simulator)
 
 1. Clone all the newly created forks, using your GitHub username instead of `YOUR_USERNAME`
 
@@ -78,7 +78,7 @@ The `docker-compose.yaml` file defines and configures all of these services.
    git clone https://github.com/YOUR_USERNAME/Pyrrha-Rules-Decision.git &&
    git clone https://github.com/YOUR_USERNAME/Pyrrha-MQTT-Client.git &&
    git clone https://github.com/YOUR_USERNAME/Pyrrha-Database.git &&
-   git clone https://github.com/YOUR_USERNAME/Pyrrha-Sensor-Simulator.git
+   git clone https://github.com/YOUR_USERNAME/Pyrrha-Device-Simulator.git
    ```
 
 1. Set MariaDB password in your terminal. This will be used with the rest of the instructions.
@@ -240,7 +240,7 @@ For `name` under `credentials` you can use the `iam_apikey_name` value from the 
 
 ### pyrrha-simulator
 
-1. Ensure the `Pyrrha-Sensor-Simulator/action/.env.docker` file exists and contains the following variables:
+1. Ensure the `Pyrrha-Device-Simulator/action/.env.docker` file exists and contains the following variables:
 
    ```bash
    IOT_HOST=pyrrha-mqttserver
@@ -248,7 +248,7 @@ For `name` under `credentials` you can use the `iam_apikey_name` value from the 
    IOT_SECURE_PORT=1883
    ```
 
-1. Copy `Pyrrha-Sensor-Simulator/action/devices.sample.json` into `Pyrrha-Sensor-Simulator/action/devices.json` and fill out the following information for each of your devices.
+1. Copy `Pyrrha-Device-Simulator/action/devices.sample.json` into `Pyrrha-Device-Simulator/action/devices.json` and fill out the following information for each of your devices.
 
    - `IOT_CLIENTID`: a unique identifier for the device
    - `IOT_DEVICE_ID`: an identifier for the device. This is the "username" for this device. This field can be the same as `IOT_CLIENTID`
